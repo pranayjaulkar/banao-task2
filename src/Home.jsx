@@ -4,9 +4,9 @@ import LoadingIcon from "./assets/LoadingIcon.svg";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
+  const [showUserCard, setShowUserCard] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [showUserDetails, setShowUserDetails] = useState(false);
-  const [currentUserDetails, setCurrentUserDetails] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [error, setError] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -20,17 +20,15 @@ const Home = () => {
         setUsers(res.data);
         setLoading(false);
       } catch (error) {
-        if (error.response.status === 500)
-          setError({ message: "Server Error: 500" });
-        else if (
-          error.response.status === 400 ||
-          error.response.status === 403 ||
-          error.response.status === 404
-        )
-          setError({ message: "Something went wrong" });
-
-        setError({ message: error.message });
-        console.error("Error fetching data:", error);
+        if (error?.response.status === 500) {
+          setError({ message: "Server Error.", status: 500 });
+        } else {
+          setError({ message: "Some error occured." });
+        }
+        setError({
+          message: error.message,
+          status: error?.response?.status || null,
+        });
       }
     };
 
@@ -38,14 +36,20 @@ const Home = () => {
   }, []);
   return (
     <>
-      <header className="bg-dark text-light py-4" style={{ height: "10vh" }}>
-        <div className="container">
-          <h1 className="h3">UserApp</h1>
-        </div>
-      </header>
+      <div
+        className="text-light fs-1 d-flex align-items-center "
+        style={{
+          height: "8vh",
+          backgroundColor: "#0a1928",
+        }}
+      >
+        <span className="mx-auto" style={{ width: "60%" }}>
+          Users
+        </span>
+      </div>
       <div
         className="main-container d-flex bg-secondary"
-        style={{ height: "90vh" }}
+        style={{ height: "92vh" }}
       >
         {loading ? (
           <div
@@ -56,45 +60,49 @@ const Home = () => {
           </div>
         ) : !error ? (
           <div
-            className="users-container col-11 col-md-6 col-xl-6 mx-auto my-4 d-flex flex-column  gap-4  overflow-y-scroll"
-            onClick={() => {
-              if (showUserDetails) setShowUserDetails(false);
-            }}
+            className="d-flex col-11 col-md-6 col-xl-6 mx-auto my-4"
           >
-            {users.map((user, i) => (
+            <div className="overflow-hidden" style={{ width: "95%" }}>
               <div
-                key={i}
-                onClick={() => {
-                  setShowUserDetails(true);
-                  setCurrentUserDetails(user);
-                }}
-                style={{ cursor: "pointer", backgroundColor: "#424e5b" }}
-                className="me-3 text-white mb-3 border d-flex align-items-center rounded"
+                className=" d-flex flex-column h-100 gap-4 "
+                style={{ width: "105%", overflowY: "scroll" }}
               >
-                <div
-                  className="m-4 d-flex align-items-center justify-content-center"
-                  style={{ width: "152px" }}
-                >
-                  <img
-                    src={user.avatar}
-                    className="rounded-circle"
-                    alt="Profile"
-                  />
-                </div>
-                <div className="w-100 d-flex flex-column py-3 ">
-                  <div className="d-flex flex-column mb-3">
-                    <span className="fs-4 fw-bolder ">{`${user.profile.firstName} ${user.profile.lastName}`}</span>
-                    <span>{user.jobTitle}</span>
+                {users.map((user, i) => (
+                  <div
+                    key={i}
+                    onClick={() => {
+                      setShowUserCard(true);
+                      setSelectedUser(user);
+                    }}
+                    style={{ cursor: "pointer", backgroundColor: "#424e5b" }}
+                    className="me-5 text-white mb-3 border d-flex align-items-center rounded"
+                  >
+                    <div
+                      className="m-4 d-flex align-items-center justify-content-center"
+                      style={{ width: "152px" }}
+                    >
+                      <img
+                        src={user.avatar}
+                        className="rounded-circle"
+                        alt="Profile"
+                      />
+                    </div>
+                    <div className="w-100 d-flex flex-column py-3 ">
+                      <div className="d-flex flex-column mb-3">
+                        <span className="fs-4 fw-bolder ">{`${user.profile.firstName} ${user.profile.lastName}`}</span>
+                        <span>{user.jobTitle}</span>
+                      </div>
+                      <div className="d-flex align-items-center mb-3">
+                        <span>{user.Bio}</span>
+                      </div>
+                      <p className="card-text">
+                        <small className="text-muted">{user.location}</small>
+                      </p>
+                    </div>
                   </div>
-                  <div className="d-flex align-items-center mb-3">
-                    <span>Bio: {user.Bio}</span>
-                  </div>
-                  <p className="card-text">
-                    <small className="text-muted">{user.location}</small>
-                  </p>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         ) : (
           <div className="h-100 d-flex align-items-center mx-auto fs-4 text-white pb-5">
@@ -103,25 +111,25 @@ const Home = () => {
         )}
 
         <div
-          className="current-user-container col-8 col-md-4 col-xl-4 flex-column text-white"
+          className=" flex-column col-8 col-md-4 col-xl-4 text-white selected-user-container"
           style={{
-            display: showUserDetails ? "flex" : "none",
+            display: showUserCard ? "flex" : "none",
             backgroundColor: "#424e5b",
           }}
         >
           <div
-            onClick={() => setShowUserDetails(false)}
+            onClick={() => setShowUserCard(false)}
             className="ms-3 mt-3"
             style={{ cursor: "pointer" }}
           >
             <img src="/back-arrow-light.png" alt="" width={30} height={30} />
           </div>
           <div className="d-flex w-100 flex-column align-items-center px-5 py-2 ">
-            {currentUserDetails && (
+            {selectedUser && (
               <>
                 <div className="m-4 w-100 d-flex align-items-center justify-content-center">
                   <img
-                    src={currentUserDetails.avatar}
+                    src={selectedUser.avatar}
                     className="rounded-circle"
                     width={200}
                     height={200}
@@ -130,25 +138,26 @@ const Home = () => {
                 </div>
                 <div className="d-flex flex-column py-3 gap-2 w-100">
                   <div className="d-flex flex-column mb-4">
-                    <span className="fs-4 fw-bolder ">{`${currentUserDetails.profile.firstName} ${currentUserDetails.profile.lastName}`}</span>
+                    <span className="fs-4 fw-bolder ">{`${selectedUser.profile.firstName} ${selectedUser.profile.lastName}`}</span>
                     <span className="fs-6">
-                      @{currentUserDetails.profile.username}
+                      @{selectedUser.profile.username}
                     </span>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <span>Bio: {currentUserDetails.Bio}</span>
                   </div>
                   <div className="d-flex align-items-center gap-2">
                     <span>Job: </span>
-                    <span>{currentUserDetails.jobTitle}</span>
+                    <span>{selectedUser.jobTitle}</span>
                   </div>
+                  <div className="d-flex align-items-center">
+                    <span>Bio: {selectedUser.Bio}</span>
+                  </div>
+
                   <div className="d-flex align-items-center gap-2">
                     <span>Email: </span>
-                    <span>{currentUserDetails.profile.email}</span>
+                    <span>{selectedUser.profile.email}</span>
                   </div>
                   <p className="card-text">
                     <small className="text-muted">
-                      {currentUserDetails.location}
+                      {selectedUser.location}
                     </small>
                   </p>
                 </div>
