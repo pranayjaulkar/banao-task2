@@ -8,6 +8,35 @@ body {
   margin: 0;
   padding: 0;
 }
-.overflow-y-scroll {
-  overflow-y: scroll;
+
+.header {
+  z-index: 10;
+}
+.current-user-container {
+  position: fixed;
+  right: 0;
+  height: 100vh;
+}
+.main-container {
+}
+/* Small devices */
+@media (min-width: 576px) {
+}
+
+/* medium devices  */
+@media (min-width: 768px) {
+}
+
+/* large devices  */
+@media (min-width: 992px) {
+  .current-user-container {
+    position: static;
+  }
+  .overflow-y-scroll {
+    overflow-y: scroll;
+  }
+}
+
+/* Extra large devices  */
+@media (min-width: 1200px) {
 }

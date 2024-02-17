@@ -43,7 +43,10 @@ const Home = () => {
           <h1 className="h3">UserApp</h1>
         </div>
       </header>
-      <div className="d-flex bg-secondary" style={{ height: "90vh" }}>
+      <div
+        className="main-container d-flex bg-secondary"
+        style={{ height: "90vh" }}
+      >
         {loading ? (
           <div
             className="d-flex align-items-center mx-auto h-100"
@@ -52,7 +55,7 @@ const Home = () => {
             <img src={LoadingIcon} alt="" width={70} height={70} />
           </div>
         ) : !error ? (
-          <div className="col-8 col-xl-6 mx-auto my-4 d-flex flex-column  gap-4  overflow-y-scroll">
+          <div className="users-container col-8 col-xl-6 mx-auto my-4 d-flex flex-column  gap-4  overflow-y-scroll">
             {users.map((user, i) => (
               <div
                 key={i}
@@ -95,7 +98,7 @@ const Home = () => {
         )}
 
         <div
-          className="col-4 col-xl-4 flex-column text-white"
+          className="current-user-container col-4 col-xl-4 flex-column text-white"
           style={{
             display: showUserDetails ? "flex" : "none",
             backgroundColor: "#424e5b",
