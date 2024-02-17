@@ -1,19 +1,10 @@
-import './App.css';
-import Header from './components/Header';
-import Card2 from './components/Card2';
-import { Route, Routes } from 'react-router-dom';
-import Home from './components/Home';
+import Home from "./Home";
+import "./App.css";
 
 function App() {
-  
-
   return (
     <>
-      <Header />
-          <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/:id" element={<Card2/>} />
-          </Routes>
+      <Home />
     </>
   );
 }
