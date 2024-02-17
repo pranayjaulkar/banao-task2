@@ -19,7 +19,7 @@ body {
 }
 .main-container {
 }
-/* Small devices */
+/* small devices */
 @media (min-width: 576px) {
 }
 
@@ -31,12 +31,13 @@ body {
 @media (min-width: 992px) {
   .current-user-container {
     position: static;
+    height: 90vh;
   }
   .overflow-y-scroll {
     overflow-y: scroll;
   }
 }
 
-/* Extra large devices  */
+/*  Extra large devices  */
 @media (min-width: 1200px) {
 }
